@@ -4,12 +4,15 @@ set -euo pipefail
 
 repo_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 skills_dir="$repo_dir/skills"
+# Skills that work only on this repository. They load from its .claude/skills.
+repo_only=(update-skills)
 
 usage() {
     cat <<EOF
 Usage: $(basename "$0") [--user | --project DIR] [--copy | --link] [--force] [SKILL ...]
 
 Installs the named skills (default: all) into a skills directory.
+Not installable: ${repo_only[*]} (works on this repository only).
 
 Target (default: ./.claude/skills if ./.claude exists, else ~/.claude/skills):
   --user          ~/.claude/skills
@@ -34,7 +37,7 @@ while [[ $# -gt 0 ]]; do
         --copy) mode=copy; shift ;;
         --link) mode=link; shift ;;
         --force) force=1; shift ;;
-        --list) ls "$skills_dir"; exit 0 ;;
+        --list) ls "$skills_dir" | grep -vxF -f <(printf '%s\n' "${repo_only[@]}"); exit 0 ;;
         -h|--help) usage; exit 0 ;;
         -*) usage >&2; exit 1 ;;
         *) names+=("$1"); shift ;;
@@ -42,7 +45,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 if [[ -z "$target" ]]; then
-    if [[ -d "$PWD/.claude" && "$PWD" != "$HOME" ]]; then
+    if [[ -d "$PWD/.claude" && "$PWD" != "$HOME" && "$PWD" != "$repo_dir" ]]; then
         target="$PWD/.claude/skills"
     else
         target="$HOME/.claude/skills"
@@ -52,7 +55,10 @@ if [[ -z "$mode" ]]; then
     [[ "$target" == "$HOME/.claude/skills" ]] && mode=link || mode=copy
 fi
 if [[ ${#names[@]} -eq 0 ]]; then
-    for dir in "$skills_dir"/*/; do names+=("$(basename "$dir")"); done
+    for dir in "$skills_dir"/*/; do
+        name="$(basename "$dir")"
+        [[ " ${repo_only[*]} " == *" $name "* ]] || names+=("$name")
+    done
 fi
 
 mkdir -p "$target"
@@ -63,6 +69,10 @@ for name in "${names[@]}"; do
     dest="$target/$name"
     if [[ ! -f "$source/SKILL.md" ]]; then
         echo "  $name: no such skill" >&2
+        exit 1
+    fi
+    if [[ " ${repo_only[*]} " == *" $name "* ]]; then
+        echo "  $name: works on this repository only, not installable" >&2
         exit 1
     fi
     if [[ -L "$dest" && "$(readlink "$dest")" == "$source" ]]; then
