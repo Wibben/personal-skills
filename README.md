@@ -9,7 +9,7 @@ A collection of Claude Code skills. Each folder in `skills/` is one skill: a
 | [`coding-standards`](skills/coding-standards/SKILL.md) | Writing and reviewing code. General rules, plus files for C and C++, firmware, Python, web, shell, debug scripts, and validation scripts. Includes a code-review procedure. | `asd-ste100` |
 | [`implementation-plan`](skills/implementation-plan/SKILL.md) | Writing a staged implementation plan, answering its questions, and executing it stage by stage. | `asd-ste100`, `coding-standards` |
 | [`update-skills`](skills/update-skills/SKILL.md) | Pulling changes from the projects and files that skills came from, and reviewing skills for a newer model. Works on this repository only, so it is not installed. It loads from `.claude/skills/` when you work here. | — |
-| [`claude-cleanup`](skills/claude-cleanup/SKILL.md) | Auditing and tidying `~/.claude`: stale files, dead config entries, one-off permissions, settings that contradict `CLAUDE.md`, outdated prices, and memory hygiene. Install with `--user`. | — |
+| [`config-cleanup`](skills/config-cleanup/SKILL.md) | Auditing and tidying `~/.claude`: stale files, dead config entries, one-off permissions, settings that contradict `CLAUDE.md`, outdated prices, and memory hygiene. Install with `--user`. | — |
 
 The skills refer to each other by name, but each one works alone. Where a
 skill depends on another one, it carries a short fallback.
@@ -25,8 +25,8 @@ If a user asks you to import skills from this repository, do this:
      `<project>/.claude/skills/`.
    - Otherwise, install into `~/.claude/skills/`.
    - If the user names a target, use it.
-   - `claude-cleanup` always goes into `~/.claude/skills/`
-     (`install.sh --user claude-cleanup`), because it works on the user's
+   - `config-cleanup` always goes into `~/.claude/skills/`
+     (`install.sh --user config-cleanup`), because it works on the user's
      own Claude Code directory, not on a project.
 2. **Choose the skills.** Install all of them unless the user names some.
    `update-skills` is never installed: it works on this repository only.

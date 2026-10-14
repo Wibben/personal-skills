@@ -28,7 +28,7 @@ each one was taken from.
 - Copyright (c) 2025-2026 Shayan Rais
 - Licence: MIT.
 - Used in: ideas adapted into `skills/implementation-plan` (fresh-context plan
-  review, context hygiene), `skills/claude-cleanup` (checks for settings,
+  review, context hygiene), `skills/config-cleanup` (checks for settings,
   `CLAUDE.md` size, and unscoped rules), and `skills/update-skills` (the
   skill-authoring checklist).
 

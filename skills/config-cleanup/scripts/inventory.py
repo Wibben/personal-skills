@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inventory a Claude Code user directory for the claude-cleanup skill.
+"""Inventory a Claude Code user directory for the config-cleanup skill.
 
 Reports, and never deletes:
 

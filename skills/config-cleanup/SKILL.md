@@ -1,5 +1,5 @@
 ---
-name: claude-cleanup
+name: config-cleanup
 description: "Audit and clean up the user's Claude Code directory (~/.claude and ~/.claude.json): stale lock files, old shell snapshots, the skills trash, config entries for deleted folders, one-off permission rules, a default model that contradicts CLAUDE.md, outdated model names and prices in CLAUDE.md, and memory hygiene. Reports first, edits config only with approval, and never deletes files itself. Use when the user asks to clean up, tidy, audit, or review their ~/.claude, Claude Code settings, or memories."
 ---
 
