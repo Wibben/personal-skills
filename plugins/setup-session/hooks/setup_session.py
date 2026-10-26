@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Set up a Claude Code session: make the personal skills available, and keep their rules.
 
-Runs as a SessionStart hook at startup. It has two jobs:
+Runs as a SessionStart hook at startup. It has three jobs:
 
   skills  Every skill in the personal-skills repository must be available,
           from claude.ai (~/.claude/skills/synced/) or installed locally.
@@ -12,10 +12,13 @@ Runs as a SessionStart hook at startup. It has two jobs:
   rules   Each file in the repository's plugins/setup-session/rules/ folder
           is kept as ~/.claude/rules/setup-session-<name>.md. The hook leaves
           a rule file that was edited by hand, and reports it.
+  settings  Each value in required-settings.json is merged into
+          ~/.claude/settings.json at every startup. A list gets the missing
+          entries. Any other value is overwritten. Other settings stay.
 
 The clone is in $CLAUDE_PLUGIN_DATA and is refreshed at most once a day.
-Rules come from the clone, so a rule change reaches every machine without a
-new plugin upload. The hook never fails the session: problems become
+Rules and settings come from the clone, so a change reaches every machine
+without a new plugin upload. The hook never fails the session: problems become
 warnings.
 
 Usage: setup_session.py [--check]   (--check reports, and changes nothing)
@@ -160,6 +163,44 @@ def sync_rules(config, rules_dir, write):
     return changes, warnings, changed
 
 
+def merge(current, required, prefix=""):
+    """Merge required into current, in place. Return a description of each change."""
+    changes = []
+    for key, value in required.items():
+        name = f"{prefix}{key}"
+        if isinstance(value, dict):
+            if not isinstance(current.get(key), dict):
+                current[key] = {}
+            changes += merge(current[key], value, f"{name}.")
+        elif isinstance(value, list):
+            if not isinstance(current.get(key), list):
+                current[key] = []
+            missing = [entry for entry in value if entry not in current[key]]
+            current[key] += missing
+            changes += [f"added {json.dumps(entry)} to {name}" for entry in missing]
+        elif current.get(key) != value:
+            current[key] = value
+            changes.append(f"set {name} to {json.dumps(value)}")
+    return changes
+
+
+def sync_settings(config, required_file, write):
+    """Return (changes, warnings)."""
+    # Resolve a symlink, so a settings.json kept in a dotfiles repository stays a link.
+    path = (config / "settings.json").resolve()
+    try:
+        settings = json.loads(path.read_text()) if path.exists() else {}
+    except ValueError:
+        return [], [f"{path} is not valid JSON, so the required settings were not applied"]
+    changes = merge(settings, json.loads(required_file.read_text()))
+    if changes and write:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        tmp = path.with_name(path.name + ".tmp")
+        tmp.write_text(json.dumps(settings, indent=2, ensure_ascii=False) + "\n")
+        os.replace(tmp, path)
+    return [f"{change} in settings.json" for change in changes], []
+
+
 def run(check, project):
     config = Path(os.environ.get("CLAUDE_CONFIG_DIR") or Path.home() / ".claude")
     data = Path(os.environ.get("CLAUDE_PLUGIN_DATA") or Path.home() / ".cache" / NAME)
@@ -183,6 +224,12 @@ def run(check, project):
     rules_dir = next((d for d in (clone / "plugins" / NAME / "rules", plugin_root / "rules") if d.is_dir()), None)
     if rules_dir:
         more, warn, changed_rules = sync_rules(config, rules_dir, write=not check)
+        changes += more
+        warnings += warn
+    required_file = next((f for f in (clone / "plugins" / NAME / "required-settings.json",
+                                      plugin_root / "required-settings.json") if f.is_file()), None)
+    if required_file:
+        more, warn = sync_settings(config, required_file, write=not check)
         changes += more
         warnings += warn
     return changes, warnings, changed_rules, skills_changed

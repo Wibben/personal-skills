@@ -28,6 +28,12 @@ A `SessionStart` hook runs `hooks/setup_session.py`:
    every session. A footer holds a hash, so the hook can tell a hand edit
    and leaves that file alone. The rules come from the clone, so a rule
    change reaches every machine without a new plugin upload.
+4. **Enforces the required settings.** It merges `required-settings.json`
+   into `~/.claude/settings.json` at every startup. A list, such as
+   `permissions.ask`, gets the entries that are missing. Any other value is
+   overwritten. Your other settings stay. If you remove a required entry by
+   hand, the next session adds it again. To change a required setting, edit
+   `required-settings.json` in the repository.
 
 When it installs a skill, the hook asks Claude Code to re-scan skills
 (`reloadSkills`), so the skill works in the same session. When it changes a
@@ -46,12 +52,30 @@ rule, it adds the new rule text to the session too. The hook needs `git` and
 Rules come from this public repository, so keep internal names and private
 details out of them.
 
+## Required settings
+
+`required-settings.json` makes these rules more than instructions:
+
+- `permissions.ask` makes Claude Code ask before an action that reaches
+  other people or loses work. The actions are a `git push`, any `gh`
+  command, a `git reset --hard` or `git clean`, and an MCP tool whose name
+  has `send`, `create`, `update`, `edit`, or `delete` in it. These patterns
+  are broad on purpose, so some commands that only read also ask. They are not a security boundary: a
+  script or a git alias that pushes does not match.
+- `attribution` removes the Claude attribution from commits and pull
+  requests.
+
 ## Commands
 
 ```bash
 python3 -I hooks/setup_session.py --check    # report what it would change; no network, no writes
 claude --plugin-dir plugins/setup-session    # try the plugin in a session
 ```
+
+The hook finds its clone in `$CLAUDE_PLUGIN_DATA`, which Claude Code sets
+only when it runs the hook. For `--check`, set it to the plugin's data
+folder. For the plugin from claude.ai, that folder is
+`~/.claude/plugins/data/setup-session-synced`.
 
 Set `SETUP_SESSION_REPO` to use a different repository, for example a fork
 or a local path for testing.
