@@ -5,9 +5,10 @@ machine. Claude.ai syncs uploaded skills to every machine, but not rules,
 and not skills that you only installed locally. This plugin fills both
 gaps.
 
-## What it does at startup
+## What it does when a session starts
 
-A `SessionStart` hook runs `hooks/setup_session.py`:
+A `SessionStart` hook runs `hooks/setup_session.py` at startup and when you
+resume a session (`--resume` or `--continue`):
 
 1. **Gets the skills repository.** It clones
    https://github.com/Wibben/personal-skills into the plugin's data folder,
@@ -29,7 +30,7 @@ A `SessionStart` hook runs `hooks/setup_session.py`:
    and leaves that file alone. The rules come from the clone, so a rule
    change reaches every machine without a new plugin upload.
 4. **Enforces the required settings.** It merges `required-settings.json`
-   into `~/.claude/settings.json` at every startup. A list, such as
+   into `~/.claude/settings.json` at every session start. A list, such as
    `permissions.ask`, gets the entries that are missing. Any other value is
    overwritten. Your other settings stay. If you remove a required entry by
    hand, the next session adds it again. To change a required setting, edit

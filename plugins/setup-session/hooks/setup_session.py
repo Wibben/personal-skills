@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Set up a Claude Code session: make the personal skills available, and keep their rules.
 
-Runs as a SessionStart hook at startup. It has three jobs:
+Runs as a SessionStart hook at startup and on --resume. It has three jobs:
 
   skills  Every skill in the personal-skills repository must be available,
           from claude.ai (~/.claude/skills/synced/) or installed locally.
@@ -13,8 +13,9 @@ Runs as a SessionStart hook at startup. It has three jobs:
           is kept as ~/.claude/rules/setup-session-<name>.md. The hook leaves
           a rule file that was edited by hand, and reports it.
   settings  Each value in required-settings.json is merged into
-          ~/.claude/settings.json at every startup. A list gets the missing
-          entries. Any other value is overwritten. Other settings stay.
+          ~/.claude/settings.json at every session start. A list gets the
+          missing entries. Any other value is overwritten. Other settings
+          stay.
 
 The clone is in $CLAUDE_PLUGIN_DATA and is refreshed at most once a day.
 Rules and settings come from the clone, so a change reaches every machine
