@@ -1,5 +1,5 @@
 {
-  "_doc": "Where each skill came from, and which model it was last reviewed for. Sources that are private files on one machine go in manifest.local.json, which git ignores. Read and updated by skills/update-skills/scripts/upstream.py. See skills/update-skills/SKILL.md for the field reference.",
+  "_doc": "Where each skill came from, and which model it was last reviewed for. Sources that are private files on one machine go in manifest.local.json, which git ignores. Read and updated by skills/update-skills/scripts/upstream.py. See .claude/skills/update-skills/SKILL.md for the field reference.",
   "skills": {
     "asd-ste100": {
       "model_review": {

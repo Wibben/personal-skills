@@ -38,7 +38,7 @@ SNAPSHOTS = Path.home() / ".cache" / "personal-skills" / "snapshots"
 class Upstream:
     def __init__(self):
         parser = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
-        parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[3],
+        parser.add_argument("--repo", type=Path, default=Path(__file__).resolve().parents[4],
                             help="the skills repository (default: the one this script is in)")
         commands = parser.add_subparsers(dest="command", required=True)
         status = commands.add_parser("status")
@@ -158,7 +158,9 @@ class Upstream:
                 print(f"{skill} <- {source['name']}: not a vendored git source; use diff and fold changes in by hand")
                 continue
             directory, head = self.checkout(source)
-            skill_dir = self.args.repo / "skills" / skill
+            # update-skills itself lives in .claude/skills, the others in skills/.
+            skill_dir = next((d for d in (self.args.repo / "skills" / skill, self.args.repo / ".claude" / "skills" / skill)
+                              if d.is_dir()), self.args.repo / "skills" / skill)
             for upstream_path, local_path in source["files"].items():
                 print(f"{skill}/{local_path}: {self.merge_file(directory, source['commit'], head, upstream_path, skill_dir / local_path)}")
 
