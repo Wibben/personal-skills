@@ -32,6 +32,16 @@ each one was taken from.
   `CLAUDE.md` size, and unscoped rules), and `skills/update-skills` (the
   skill-authoring checklist).
 
+## dictionary-of-colour-combinations
+
+- Source: https://github.com/mattdesl/dictionary-of-colour-combinations
+- Copyright (c) 2020 Matt DesLauriers. The data was first compiled by Dain
+  M. Blodorn Kim (dblodorn/sanzo-wada), from Sanzo Wada's *A Dictionary of
+  Colour Combinations* (1933–34).
+- Licence: MIT. The full text is in
+  `skills/colour-scheme/LICENSE-dictionary-of-colour-combinations`.
+- Used in: `skills/colour-scheme/data/colors.json`, copied without changes.
+
 ## Google Developer Documentation Style Guide
 
 - Source: https://developers.google.com/style

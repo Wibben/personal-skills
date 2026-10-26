@@ -145,6 +145,30 @@
         }
       ]
     },
+    "colour-scheme": {
+      "model_review": {
+        "model": "claude-opus-5-5",
+        "date": "2026-10-25"
+      },
+      "sources": [
+        {
+          "name": "dictionary-of-colour-combinations",
+          "kind": "git",
+          "mode": "vendored",
+          "repo": "https://github.com/mattdesl/dictionary-of-colour-combinations",
+          "ref": "master",
+          "commit": "c142bd0bc8049ea48db4da5eb397981f047e8ef4",
+          "synced": "2026-10-25",
+          "license": "MIT",
+          "license_file": "LICENSE-dictionary-of-colour-combinations",
+          "files": {
+            "colors.json": "data/colors.json",
+            "LICENSE.md": "LICENSE-dictionary-of-colour-combinations"
+          },
+          "local_changes": "None. SKILL.md and scripts/scheme.py are new work that reads the data."
+        }
+      ]
+    },
     "update-skills": {
       "model_review": {
         "model": "claude-opus-5-5",
