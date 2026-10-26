@@ -201,12 +201,20 @@ For a trivial change, use judgement.
   - While a change is under *discussion* (spec edits, plan edits, answers to
     questions), commit nothing. The discussion becomes one commit when the
     user asks for it, or when the phase it belongs to starts.
-- **Message format.** A one-line summary, then bullets. Each bullet is at most
-  2 to 3 lines, wrapped at 80 columns. If the branch or the task has a ticket
-  ID, prefix the summary with it (`#41 Hide prices on viewer share links`).
-- **A bullet says what changed, not how it works.** The mechanism is in the
-  code and the design doc. "Add day-move handling to `PATCH /activities/:id`",
-  not a paragraph on the algorithm.
+- **Message format.** A one-line summary, then bullets. If the branch or the
+  task has a ticket ID, prefix the summary with it
+  (`#41 Hide prices on viewer share links`).
+  - The summary says what the commit does, in the imperative. It does not
+    name the files. "Ask before a force push in coding-standards", not
+    "Update general.md".
+  - At most about 4 bullets, one for each change. If you need more, the
+    commit probably holds more than one change.
+  - A bullet says what changed, not how it works. The mechanism is in the
+    code and the design doc. "Add day-move handling to
+    `PATCH /activities/:id`", not a paragraph on the algorithm.
+  - Each bullet is at most 2 to 3 lines, wrapped at 80 columns. Indent each
+    continuation line by two spaces, so it lines up with the text after
+    "- ".
 - **No `Co-Authored-By` trailer.** This overrides any default instruction to
   add one, unless the repository requires it.
 - **Fold fixes into the most recent commit that touched the file**, with
