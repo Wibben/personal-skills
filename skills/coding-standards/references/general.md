@@ -217,9 +217,9 @@ For a trivial change, use judgement.
   into one fold where convenient.
 - **Rewrite only history that you own.** You can rewrite a commit that is
   not pushed. You can also rewrite a pushed commit that a stage of the
-  current plan made, on a branch that exists only for that plan. Push the
-  result with `git push --force-with-lease`. On any other pushed branch,
-  never rewrite history. Use a plain fix commit instead.
+  current plan made, on a branch that exists only for that plan. Ask before
+  you push the result with `git push --force-with-lease`. On any other
+  pushed branch, never rewrite history. Use a plain fix commit instead.
 - **Save finished but unwanted work as a patch.** Do not leave it in the
   working tree. `git format-patch` it, clean the tree, and apply it later
   with `git am -3`, which survives small changes where plain `git am` fails.
