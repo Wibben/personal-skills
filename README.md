@@ -65,6 +65,14 @@ Copy or symlink a folder from `skills/` into `~/.claude/skills/` or
 4. Add the skill to `manifest.json`, with a source for anything it takes
    from elsewhere (see `.claude/skills/update-skills/SKILL.md`, mode 3).
 
+## Plugins
+
+[`plugins/setup-session`](plugins/setup-session/README.md) sets up each
+session on any machine. At startup it installs any skill from this
+repository that is missing, whether you expected it from claude.ai or
+from a local install. It also keeps the rules that tell Claude when to
+load each skill in `~/.claude/rules/`.
+
 ## Working on this repository
 
 `update-skills` lives in `.claude/skills/`, so it loads only when you work

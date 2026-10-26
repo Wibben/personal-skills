@@ -1,0 +1,17 @@
+{
+  "description": "Make the personal skills available and keep their rules in ~/.claude/rules",
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -I \"${CLAUDE_PLUGIN_ROOT}/hooks/setup_session.py\"",
+            "timeout": 60
+          }
+        ]
+      }
+    ]
+  }
+}

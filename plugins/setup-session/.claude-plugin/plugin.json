@@ -1,0 +1,11 @@
+{
+  "$schema": "https://anthropic.com/claude-code/plugin.schema.json",
+  "name": "setup-session",
+  "version": "0.1.0",
+  "description": "Sets up each Claude Code session: installs any personal skill that is missing (from github.com/Wibben/personal-skills) and keeps the rules that tell Claude when to use each skill in ~/.claude/rules.",
+  "author": {
+    "name": "Wibben"
+  },
+  "homepage": "https://github.com/Wibben/personal-skills",
+  "repository": "https://github.com/Wibben/personal-skills"
+}
